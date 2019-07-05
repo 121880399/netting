@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:netting/common/style.dart';
+import 'package:netting/model/birthday_user_info_entity.dart';
+import 'package:netting/pages/home/birthday_card.dart';
+import 'package:netting/widget/bottom_drag_widget.dart';
 import 'package:netting/widget/tip_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,45 +12,98 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String image = "http://www.xzw.com/static/public/images/fortune/image/11.gif";
+  double get screenH => MediaQuery.of(context).size.height;
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            new Stack(
-              children: <Widget>[
-                //贝塞尔曲线
-                new ClipPath(
-                  clipper: BgClipper(),
-                  child: Container(
-                    color: Theme.of(context).primaryColor,
-                    height: 200.0,
+      body: new Container(
+        child: new SafeArea(
+            child:new BottomDragWidget(
+              body: _getBody(),
+              dragContainer: DragContainer(
+                  drawer: Container(
+                    child: OverscrollNotificationWidget(
+                        child: BirthdayCardWidget(getBirthdayUserInfo())
+                    ),
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 243, 244, 248),
+                        borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(10.0),
+                            topRight: const Radius.circular(10.0))),
                   ),
-                ),
-                header(),
-              ],
-            ),
-            baseCharacterTip(),
-            baseCharacter(),
-            specificCharacterTip(),
-            specificCharacter(),
-            workStyleTip(),
-            workStyle(),
-            defectTip(),
-            defect(),
-            summaryTip(),
-            summary(),
-            SizedBox(
-              height: 20.0,
-            ),
-          ],
+                  defaultShowHeight: screenH * 0.5,
+                  height: screenH * 0.5
+              ),
+            )
         ),
       ),
     );
   }
+
+  List<BirthdayUserInfoEntity> getBirthdayUserInfo(){
+    List<BirthdayUserInfoEntity> userInfo = List();
+    BirthdayUserInfoEntity user1 = new BirthdayUserInfoEntity();
+    user1.userName = "周正一";
+    user1.avatarUrl = "https://timgsa.baidu"
+        ".com/timg?image&quality=80&size=b9999_10000&sec=1558431538745&di=d992b4428d62d9b54109e0917ef49907&imgtype=0&src=http%3A%2F%2Ftupian.qqjay.com%2Ftou2%2F2018%2F0724%2F696a864cb3385854e4f2f650e49d60a1.jpg";
+    user1.categoryName = "命友";
+    user1.birthday="1990年1月27日";
+    user1.surplusDay="剩余：200天";
+    userInfo.add(user1);
+    BirthdayUserInfoEntity user2 = new BirthdayUserInfoEntity();
+    user2.userName = "周正一";
+    user2.avatarUrl = "https://timgsa.baidu"
+        ".com/timg?image&quality=80&size=b9999_10000&sec=1558431538745&di=d992b4428d62d9b54109e0917ef49907&imgtype=0&src=http%3A%2F%2Ftupian.qqjay.com%2Ftou2%2F2018%2F0724%2F696a864cb3385854e4f2f650e49d60a1.jpg";
+    user2.categoryName = "命友";
+    user2.birthday="1990年1月27日";
+    user2.surplusDay="剩余：200天";
+    userInfo.add(user2);
+    return userInfo;
+  }
+
+  ///底部内容
+  Widget _getBody(){
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: <Widget>[
+       new  SliverToBoxAdapter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              new Stack(
+                children: <Widget>[
+                  //贝塞尔曲线
+                  new ClipPath(
+                    clipper: BgClipper(),
+                    child: Container(
+                      color: Theme.of(context).primaryColor,
+                      height: 200.0,
+                    ),
+                  ),
+                  header(),
+                ],
+              ),
+              baseCharacterTip(),
+              baseCharacter(),
+              specificCharacterTip(),
+              specificCharacter(),
+              workStyleTip(),
+              workStyle(),
+              defectTip(),
+              defect(),
+              summaryTip(),
+              summary(),
+              SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
 
   ///头部卡片信息
   Widget header() {
